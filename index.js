@@ -5,6 +5,8 @@ var app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
+//set the middle ware to parse the request
+app.use(express.urlencoded());
 
 app.use('/', require('./routers/home'));
 

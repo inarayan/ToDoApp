@@ -5,6 +5,33 @@
     </title>
 </head>
 <body>
-    Welcome to Todo Page
+    <div>
+    <form action="/add-task" method="POST">
+        Description <input type="text" name="description"/>
+        Category <select name="Category">
+            <option value="Personal">Personal</option>
+            <option value="Work">Work</option>
+            <option value="School">School</option>
+            <option value="Cooing">Cooling</option>
+            <option value="Other">Other</option>
+        </select>
+        DUE DATE: <input type="date" name="todoDate"/>
+        <input type="submit" value="Add Task"/>
+        <input type="submit" value="Delete Task"/>
+    </form>
+    
+    </div>
+
+    <div>
+        <div>
+            <% for ( let d of todoList ){%> 
+            <div class="task" id=<%= d._id%>"style="flex-wrap: wrap"></div>>
+                <div><input type="checkbox" name="description"/><%= d.description %></div>
+                <div><%= d.dueDate %></div>
+                <div><%= d.category %></div>
+            </div>
+            <% } %>
+        </div>
+    </div>
 </body>
 </html>
