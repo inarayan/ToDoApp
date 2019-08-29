@@ -2,39 +2,35 @@ const Task = require('../model/Task');
 const mongoose = require('../config/mongoose');
 var todoList = [];
 
+
 module.exports.todo_details = function(req, res){
-    console.log('inside query 1');
+  
     
     Task.find({}, function(err,taskList){
-        console.log('inside query');
-
+        
         if(err){
-            console.log('error fetching the details')
+            console.log('error fetching the details');
+            return;
         }
         else{
-            console.log('taskList');
+            todoList=taskList;  
+          
             
-            console.log(taskList);
-            todoList=taskList;
+            return res.render('home',{
+                title:"To Do Appas",
+                todoList: taskList
+                
+            });
         }
+
     });
 
-    // var todoList = [{
-    //     "description": 'A Sample Task',
-    //     "category": 'work',
-    //     "duedate":'09/28/2019'
-    // }];
-    console.log('todoList' , todoList);
-    return res.render('home',{ 
-        'title':'ToDoApp',
-        'todoList': todoList
-        
-    });
+    
 };
 
 module.exports.todo_createTask = function(req, res){
-   console.log('********');
-    console.log(req.body)
+ 
+    
 
     //insert the record in mongoDB
     var newTask = new Task({
@@ -46,12 +42,34 @@ module.exports.todo_createTask = function(req, res){
     newTask.save( function(err){
         if(err){
             console.log('Could not save the object');
+            return;
         }
         else{
             console.log(' A New Task has been created');
+            res.redirect('/');
         }
     })
 
-    res.redirect('/');
+    
 }
+
+
+module.exports.todo_deleteTask = function(req, res){
+    console.log('********inside delete task');
+
+     console.log(" The request parameter " + req.params.id);
+     Task.findByIdAndRemove({_id:req.params.id}, function(err){
+        if(err) {
+            console.log("Error deleting the object");
+            return;
+        }
+        else{
+            console.log('Sucessfully deleted the record');
+            return res.redirect('/');
+        }
+         
+     })
+
+     
+ };
 

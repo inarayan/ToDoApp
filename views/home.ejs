@@ -1,37 +1,84 @@
 <!DOCTYPE html>
 <head>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    
     <title>
         <%= title %>
     </title>
 </head>
 <body>
-    <div>
+        
+    <div style="text-align:center ;font-size: 2rem" >
+        TODO App
+    </div>
+  <div>    
     <form action="/add-task" method="POST">
-        Description <input type="text" name="description"/>
-        Category <select name="Category">
+        <hr>
+                Description <input style="display: block" type="text" name="description"/>
+      
+    <hr>
+    <div class="form-category" style="display: inline-block; width: 40%">
+        Category <select style="display: block" name="Category">
             <option value="Personal">Personal</option>
             <option value="Work">Work</option>
             <option value="School">School</option>
             <option value="Cooing">Cooling</option>
             <option value="Other">Other</option>
         </select>
-        DUE DATE: <input type="date" name="todoDate"/>
+    </div>
+    <div class="form-category" style="display: inline-block; width: 40%">
+        DUE DATE: <input style="display: block" type="date" name="todoDate"/>
+    </div>    
+    <hr>    
         <input type="submit" value="Add Task"/>
-        <input type="submit" value="Delete Task"/>
+        <button type="button" onClick="deletetasks()">Delete Task</button>
+      <hr>  
     </form>
     
     </div>
 
     <div>
-        <div>
+        <div id="taskList">
             <% for ( let d of todoList ){%> 
-            <div class="task" id=<%= d._id%>"style="flex-wrap: wrap"></div>>
-                <div><input type="checkbox" name="description"/><%= d.description %></div>
-                <div><%= d.dueDate %></div>
-                <div><%= d.category %></div>
+            
+            <div id= <%= "taskItem" + d._id %>>
+            <hr>
+            <div class="task" style="display:flex; flex-wrap: wrap ">
+                <div style="width:40%"> <input type="checkbox" name="description" id= <%= d._id %>><%= d.description %></div>
+                <div style="width:40%"><%= d.category %></div>
+                <div style="width:40%"><%= d.dueDate %></div>
             </div>
+        </div>
             <% } %>
         </div>
     </div>
+   
+    <script>
+    let id=0;
+        function deletetasks(){
+
+            let checkedInputs = $("input:checked");
+            
+            for (var i=0;i<checkedInputs.length;i++){
+                let idToDelete = checkedInputs[i].id;
+
+                var url = "/delete-task/"+idToDelete;
+                $.ajax({url:url, success:function(){
+                $('#'+"taskItem"+idToDelete).remove();
+
+            }, error:function(){
+                console.log("Error while deleting");
+                return;
+            }});
+                
+            }
+           
+
+            
+           
+           
+        }
+    </script>
 </body>
 </html>
